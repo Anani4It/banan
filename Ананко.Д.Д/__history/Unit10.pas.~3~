@@ -1,0 +1,100 @@
+unit Unit10;
+
+interface
+
+uses
+   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, acPNG, Vcl.ExtCtrls,
+  Vcl.Buttons;
+
+type
+  TForm10 = class(TForm)
+    Image1: TImage;
+    Image2: TImage;
+    CheckBox4: TCheckBox;
+    Label1: TLabel;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    CheckBox5: TCheckBox;
+    CheckBox6: TCheckBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
+    CheckBox9: TCheckBox;
+    CheckBox10: TCheckBox;
+    BitBtn1: TBitBtn;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    BitBtn2: TBitBtn;
+    Edit11: TEdit;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+  sum:integer;
+    { Public declarations }
+  end;
+
+var
+  Form10: TForm10;
+   i: Integer;
+  CheckBoxes: array[1..10] of TCheckBox; // Объявляем массив CheckBoxes
+   Edits: array[1..10] of TEdit;
+implementation
+
+{$R *.dfm}
+
+procedure TForm10.FormCreate(Sender: TObject);
+
+ begin
+  // Заполняем массив CheckBoxes ссылками на TCheckBox компоненты
+  CheckBoxes[1] := CheckBox1;
+  CheckBoxes[2] := CheckBox2;
+  CheckBoxes[3] := CheckBox3;
+  CheckBoxes[4] := CheckBox4;
+  CheckBoxes[5] := CheckBox5;
+  CheckBoxes[6] := CheckBox6;
+  CheckBoxes[7] := CheckBox7;
+  CheckBoxes[8] := CheckBox8;
+  CheckBoxes[9] := CheckBox9;
+  CheckBoxes[10] := CheckBox10;
+
+  Edits[1] := Edit1;
+  Edits[2] := Edit2;
+  Edits[3] := Edit3;
+  Edits[4] := Edit4;
+  Edits[5] := Edit5;
+  Edits[6] := Edit6;
+  Edits[7] := Edit7;
+  Edits[8] := Edit8;
+  Edits[9] := Edit9;
+  Edits[10] := Edit10;
+end;
+
+procedure TForm10.BitBtn1Click(Sender: TObject);
+begin
+
+  // Считываем сумму из всех TEdit компонентов, у которых соответствующий флажок установлен
+  sum := 0;
+  for i := 1 to 10 do
+    if CheckBoxes[i].Checked then
+      edit11.text := inttoStr(strToInt(edit11.text) + strToInt(edits[i].text))
+//      sum := sum + StrToInt(Edits[i].Text);
+
+  // Выводим результат в Edit11
+//  Edit11.Text := IntToStr(sum);
+end;
+end.
+
+
+
+

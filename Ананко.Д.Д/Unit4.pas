@@ -1,0 +1,139 @@
+unit Unit4;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
+  Vcl.Imaging.pngimage;
+
+type
+  TForm4 = class(TForm)
+    Label1: TLabel;
+    RadioGroup2: TRadioGroup;
+    Button1: TButton;
+    BitBtn1: TBitBtn;
+    Image3: TImage;
+    RadioGroup1: TRadioGroup;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form4: TForm4;
+  f: text;
+s: string;
+Nvern, ball, totalQuestions: integer;
+
+
+implementation
+
+{$R *.dfm}
+
+uses Unit2;
+
+procedure TForm4.BitBtn1Click(Sender: TObject);
+begin
+close;
+end;
+procedure TForm4.Button1Click(Sender: TObject);
+
+
+
+begin
+if (RadioGroup2.ItemIndex > -1) and (not Eof(f)) then
+  begin
+    totalQuestions := totalQuestions + 1; // Увеличиваем общее количество вопросов
+    // Если выбранный вариант соответствует номеру верного ответа, то балл прибавляется
+    if RadioGroup2.ItemIndex = Nvern - 1 then
+    begin
+      ball := ball + 1;
+      Label1.Caption := 'Верно!';
+    end
+    else
+    begin
+      Label1.Caption := 'Неверно';
+    end;
+    RadioGroup2.Items.Clear; // Очищается поле для следующего вопроса
+    repeat
+      if (s[1] = '-') then
+      begin
+        delete(s, 1, 1);
+        RadioGroup2.Caption := s;
+      end
+      else if s[1] = '*' then
+      begin
+        delete(s, 1, 1);
+        Nvern := StrToInt(s);
+      end
+      else
+        RadioGroup2.Items.Add(s);
+      readln(f, s);
+    until (s[1] = '-') or Eof(f);
+  end
+  // Если конец файла достигнут, значит вопросы закончились
+  else if Eof(f) then
+  begin
+    delete(s, 1, 1);
+    Nvern := StrToInt(s);
+    totalQuestions := totalQuestions + 1; // Увеличиваем общее количество вопросов
+    if RadioGroup2.ItemIndex = Nvern - 1 then
+    begin
+      ball := ball + 1;
+      Label1.Caption := 'Верно!';
+    end
+    else
+    begin
+      Label1.Caption := 'Неверно';
+    end;
+    // Вычисляем процент правильных ответов
+    Label1.Caption := Label1.Caption + Format('. Ваш результат: %d%% правильных ответов', [Round(ball / totalQuestions * 100)]);
+    CloseFile(f);
+    button1.Enabled:=false;
+  end;
+end;
+
+
+procedure TForm4.RadioGroup1Click(Sender: TObject);
+begin
+RadioGroup1.Enabled:=false; //Выбор варианта становится недоступен
+RadioGroup2.Enabled:=true; //Доступным становится поле с вопросом
+Button1.Enabled:=true; //Кнопка Далее
+case RadioGroup1.ItemIndex of //В зависимости от выбранного варианта переменная f
+0: AssignFile( f , extractfilepath(paramstr(0))+'variant1.txt');//связывается с разными файлами
+1: AssignFile( f ,extractfilepath(paramstr(0))+'variant2.txt');
+end;
+reset(f); //Открываем файл для чтения
+readln(f,s); //Считываем первую строку из файла
+ball:=0; //изначально количество баллов 0
+repeat
+if (s[1]='-') then begin //Если первый символ строки ‘-‘ значит это вопрос
+delete(s,1,1);
+RadioGroup2.Caption:=s;
+end
+else if s[1]='*' then begin
+ //Если перв символ ‘*’ значит это номер верного ответа
+delete(s,1,1);
+//RadioGroup2.Items.Add(s);
+Nvern:=strtoint(s);
+end
+
+else RadioGroup2.Items.Add(s); //Иначе это вариант ответа
+readln(f,s); //Считываем следующую строку из файла
+until (s[1]='-') or (Eof(f));
+end;
+
+end.
+end;
+
+
+
+end.
+
+
